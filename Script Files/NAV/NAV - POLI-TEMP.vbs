@@ -5,7 +5,7 @@ start_time = timer
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
 	IF run_locally = FALSE or run_locally = "" THEN		'If the scripts are set to run locally, it skips this and uses an FSO below.
-		IF default_directory = "C:\DHS-MAXIS-Scripts\Script Files\" THEN			'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+		IF default_directory = "C:\DHS-MAXIS-Scripts\Script Files\" OR default_directory = "" THEN			'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
 			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
 		ELSEIF beta_agency = "" or beta_agency = True then							'If you're a beta agency, you should probably use the beta branch.
 			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/BETA/MASTER%20FUNCTIONS%20LIBRARY.vbs"
@@ -47,16 +47,15 @@ END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'DIALOGS--------------------------------------------------
-BeginDialog POLI_TEMP_dialog, 0, 0, 256, 60, "POLI/TEMP dialog"
-  OptionGroup RadioGroup1
-    RadioButton 5, 30, 175, 10, "Table of Contents (search by TEMP section code)", table_radio
-    RadioButton 5, 45, 150, 10, "Index of Topics (search by a word or topic)", index_radio
-  ButtonGroup ButtonPressed
-    OkButton 195, 10, 50, 15
-    CancelButton 195, 30, 50, 15
-  Text 10, 10, 160, 10, "What area of POLI/TEMP do you want to go to?"
-EndDialog
 
+BeginDialog POLI_TEMP_dialog, 0, 0, 201, 65, "Dialog"
+  DropListBox 40, 30, 60, 45, "TABLE"+chr(9)+"INDEX", Temp_table_index
+  ButtonGroup ButtonPressed
+    OkButton 150, 5, 50, 15
+    CancelButton 150, 30, 50, 15
+  Text 5, 10, 140, 15, "What area of POLI/TEMP you want to go?"
+  Text 5, 30, 30, 10, "Select:"
+EndDialog
 
 'THE SCRIPT
 
@@ -64,13 +63,12 @@ EndDialog
 Dialog POLI_TEMP_dialog
 If buttonpressed = cancel then stopscript
 
-'Determines which POLI/TEMP section to go to, using the radioboxes outcome to decide
-If radiogroup1 = table_radio then 
+'Determines which POLI/TEMP section to go to, using the dropdown list outcome to decide
+If Temp_table_index = "TABLE" then
 	panel_title = "TABLE"
-ElseIf radiogroup1 = index_radio then
+ElseIf Temp_table_index = "INDEX" then
 	panel_title = "INDEX"
 End if
-
 
 'Connects to BlueZone
 EMConnect ""
@@ -89,3 +87,5 @@ EMWriteScreen panel_title, 21, 71
 
 'Transmits
 transmit
+
+script_end_procedure("")
