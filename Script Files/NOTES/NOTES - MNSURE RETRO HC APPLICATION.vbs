@@ -142,4 +142,3 @@ IF tikl_checkbox = 1 THEN
 END IF	
 
 script_end_procedure ("")
-
