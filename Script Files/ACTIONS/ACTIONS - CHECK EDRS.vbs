@@ -44,7 +44,6 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
-Send  
 
 BeginDialog EDRS_dialog, 0, 0, 156, 80, "EDRS dialog"
   EditBox 60, 10, 80, 15, case_number
